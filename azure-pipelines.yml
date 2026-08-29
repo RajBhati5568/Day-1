@@ -1,0 +1,46 @@
+trigger:
+  - main
+ 
+pool:
+  vmImage: ubuntu-latest
+ 
+variables:
+  terraformWorkingDirectory: 'Day-1'
+ 
+steps:
+ 
+- task: TerraformInstaller@1
+  displayName: 'Install Terraform'
+  inputs:
+    terraformVersion: 'latest'
+ 
+- task: AzureCLI@2
+  displayName: 'Terraform Init'
+  inputs:
+    azureSubscription: 'service_connection_demo'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd $(terraformWorkingDirectory)
+      terraform init
+ 
+- task: AzureCLI@2
+  displayName: 'Terraform Validate'
+  inputs:
+    azureSubscription: 'service_connection_demo'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd $(terraformWorkingDirectory)
+      terraform validate
+ 
+- task: AzureCLI@2
+  displayName: 'Terraform Plan'
+  inputs:
+    azureSubscription: 'service_connection_demo'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd $(terraformWorkingDirectory)
+      terraform plan
+ 
