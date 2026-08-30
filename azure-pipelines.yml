@@ -1,0 +1,57 @@
+trigger:
+  - main
+ 
+pool:
+  vmImage: ubuntu-latest
+ 
+variables:
+  terraformWorkingDirectory: '.'
+ 
+steps:
+ 
+- bash: |
+    wget -q https://releases.hashicorp.com/terraform/1.13.1/terraform_1.13.1_linux_amd64.zip
+    unzip terraform_1.13.1_linux_amd64.zip
+    sudo mv terraform /usr/local/bin/
+    terraform version
+  displayName: 'Install Terraform'
+ 
+- task: AzureCLI@2
+  displayName: 'Terraform Init'
+  inputs:
+    azureSubscription: 'service_connection_demo'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd $(terraformWorkingDirectory)
+      terraform init
+ 
+- task: AzureCLI@2
+  displayName: 'Terraform Validate'
+  inputs:
+    azureSubscription: 'service_connection_demo'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd $(terraformWorkingDirectory)
+      terraform validate
+ 
+- task: AzureCLI@2
+  displayName: 'Terraform Plan'
+  inputs:
+    azureSubscription: 'service_connection_demo'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd $(terraformWorkingDirectory)
+      terraform plan
+ 
+- task: AzureCLI@2
+  displayName: 'Terraform Apply'
+  inputs:
+    azureSubscription: 'service_connection_demo'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd $(terraformWorkingDirectory)
+      terraform apply -auto-approve
