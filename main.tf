@@ -9,7 +9,7 @@ terraform {
 
 terraform {
   backend "azurerm" {
-    resource_group_name  = "myrg"
+    resource_group_name  = "temp_rg1_learning_eus"
     storage_account_name = "mystorage124123"
     container_name       = "firstcontainer"
     key                  = "day1.firstcontainer"
